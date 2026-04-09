@@ -42,30 +42,8 @@ Archivo: restic-backup.sh
   - Verifica integridad del repositorio.
   - Elimina snapshots antiguos según política (máx 14 días).
   - Guarda logs en /var/log/restic/restic-backup.log
-
-Contenido:
-
-#!/bin/bash
-export RESTIC_REPOSITORY=/mnt/backups/restic-backups
-export RESTIC_PASSWORD="TuContraseñaSegura"
-
-BACKUP_DIRS=(
-    "/etc/cron.d"
-    "/home/ids_mover_a_db.py"
-)
-LOG_FILE=/var/log/restic/restic-backup.log
-RETENTION="--prune --keep-daily 14"
-
-log() { echo "$(date '+%Y-%m-%d %H:%M:%S') $1" | tee -a "$LOG_FILE"; }
-
-log "=== Iniciando backup Restic ==="
-restic backup "${BACKUP_DIRS[@]}"
-restic check
-restic forget $RETENTION --prune
-log "=== Backup Restic finalizado ==="
-
-6. Dar permisos de ejecución:
-   chmod +x /home/restic-backup.sh
+  - Dar permisos de ejecución:
+    chmod +x /home/restic-backup.sh
 
 -----------------------------------------------------
 3️⃣ PROGRAMAR BACKUPS AUTOMÁTICOS
@@ -90,7 +68,8 @@ log "=== Backup Restic finalizado ==="
 - Restaurar en la ruta original (sobrescribe archivos):
   restic restore <ID_DEL_SNAPSHOT> --target /
 
-- También se puede usar el script de restauración incluido, que permite elegir snapshot y carpeta destino.
+- También se puede usar el script interactivo de restauración, que permite elegir snapshot y carpeta destino:
+   ./restic-restore.sh
 
 -----------------------------------------------------
 5️⃣ BACKUP EN LA NUBE BACKBLAZE B2
@@ -105,13 +84,7 @@ log "=== Backup Restic finalizado ==="
 2. Inicializar repositorio en B2 (solo una vez):
    restic init
 
-3. Script de backup local + nube (restic-backup-cloud.sh):
-
-#!/bin/bash
-export RESTIC_PASSWORD="TuContraseñaSegura"
-BACKUP_DIRS=("/etc" "/home/ids_mover_a_db.py")
-LOG_FILE=~/restic-backup.log
-log() { echo "$(date '+%Y-%m-%d %H:%M:%S') $1" | tee -a "$LOG_FILE"; }
+3. Script de backup local + nube (restic-backup-local+nube.sh):
 
 # Backup local
 export RESTIC_REPOSITORY=/mnt/backups/restic-backups
