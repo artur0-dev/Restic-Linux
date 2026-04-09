@@ -1,7 +1,7 @@
-=====================================================
+===================================================
       SISTEMA DE BACKUP CON RESTIC
       LOCAL + NUBE BACKBLAZE B2
-=====================================================
+===================================================
 
 Este sistema permite:
 
@@ -21,9 +21,18 @@ Este sistema permite:
 2. Crear carpeta para logs:
    mkdir -p /var/log/restic
 
-3. Definir variables de entorno para Restic:
-   export RESTIC_REPOSITORY=/mnt/backups/restic-backups
-   export RESTIC_PASSWORD="TuContraseñaSegura"
+3. Crear archivo de variables .env:
+   nano /home/.restic_env
+
+   Ejemplo de contenido:
+   # Repositorios
+   RESTIC_REPOSITORY_LOCAL=/mnt/backups/restic-backups
+   RESTIC_REPOSITORY_B2=b2:mi-backup-pruebas-seccion9-2026
+
+   # Credenciales
+   RESTIC_PASSWORD="TuContraseñaSegura"
+   B2_ACCOUNT_ID="tu_account_id"
+   B2_ACCOUNT_KEY="tu_application_key"
 
 4. Inicializar el repositorio (solo la primera vez):
    restic init
@@ -75,7 +84,7 @@ Archivo: restic-backup.sh
 5️⃣ BACKUP EN LA NUBE BACKBLAZE B2
 -----------------------------------------------------
 
-1. Definir conexión a B2 y contraseña:
+1. Definir conexión a B2 y contraseña en el .env:
    export RESTIC_REPOSITORY=b2:mi-backup-pruebas-seccion9-2026
    export B2_ACCOUNT_ID="tu_account_id"
    export B2_ACCOUNT_KEY="tu_application_key"
@@ -86,17 +95,7 @@ Archivo: restic-backup.sh
 
 3. Script de backup local + nube (restic-backup-local+nube.sh):
 
-# Backup local
-export RESTIC_REPOSITORY=/mnt/backups/restic-backups
-restic backup "${BACKUP_DIRS[@]}"
-/home/restic-metrics.sh $?
 
-# Backup nube
-export RESTIC_REPOSITORY=b2:mi-backup-pruebas-seccion9-2026
-export B2_ACCOUNT_ID="tu_account_id"
-export B2_ACCOUNT_KEY="tu_application_key"
-restic backup "${BACKUP_DIRS[@]}"
-/home/restic-metrics.sh $?
 
 -----------------------------------------------------
 6️⃣ MÉTRICAS Y MONITOREO
