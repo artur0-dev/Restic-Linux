@@ -1,7 +1,7 @@
 #!/bin/bash
 # restic-restore.sh
 # Restauración interactiva con selección por número o ID
-
+source /home/.restic_env
 # -------------------------
 # CONFIGURACIÓN
 # -------------------------

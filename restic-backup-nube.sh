@@ -1,5 +1,6 @@
 #!/bin/bash
 # Backup local + nube Backblaze B2
+source /home/.restic_env
 
 export RESTIC_PASSWORD="$RESTIC_PASSWORD"
 BACKUP_DIRS=("/etc" "/home/ids_mover_a_db.py")

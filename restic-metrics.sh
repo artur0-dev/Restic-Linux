@@ -1,5 +1,5 @@
 #!/bin/bash
-
+source /home/.restic_env
 export RESTIC_REPOSITORY="/mnt/backups/restic-backups"
 export RESTIC_PASSWORD="$RESTIC_PASSWORD"
 
