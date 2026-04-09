@@ -127,7 +127,7 @@ Para recibir un correo cuando falle un backup:
 3. Configurar variables de entorno (.env).
 4. Inicializar repositorios (local y B2).
 5. Crear scripts de backup y métricas.
-6. Configurar alertas por email.
+6. Configurar alertas por email en Grafana.
 7. Programar cron para automatizar backups.
 8. Restaurar snapshots cuando sea necesario.
 9. Monitorear métricas y estado de los backups en Grafana.
