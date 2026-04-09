@@ -29,7 +29,7 @@ export RESTIC_REPOSITORY="$RESTIC_REPOSITORY_LOCAL"
 export RESTIC_PASSWORD="$RESTIC_PASSWORD"
 
 log "=== Iniciando backup LOCAL ==="
-restic backup "${BACKUP_DIRS[@]}"
+restic backup "${BACKUP_DIRS[@]}" --quiet
 RETVAL_LOCAL=$?
 
 if [ $RETVAL_LOCAL -eq 0 ]; then
@@ -56,7 +56,7 @@ export B2_ACCOUNT_KEY="$B2_ACCOUNT_KEY"      # tu Application Key
 export RESTIC_PASSWORD="$RESTIC_PASSWORD"
 
 log "=== Iniciando backup NUBE (B2) ==="
-restic backup "${BACKUP_DIRS[@]}"
+restic backup "${BACKUP_DIRS[@]}" --quiet
 RETVAL_B2=$?
 
 if [ $RETVAL_B2 -eq 0 ]; then

@@ -25,7 +25,7 @@ log() {
 log "=== Iniciando backup Restic ==="
 
 # hacer backup de la lista de carpetas
-restic backup "${BACKUP_DIRS[@]}"
+restic backup "${BACKUP_DIRS[@]}" --quiet
 if [ $? -eq 0 ]; then
     log "Backup completado con éxito."
 else

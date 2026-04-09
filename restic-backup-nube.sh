@@ -10,7 +10,7 @@ log() { echo "$(date '+%Y-%m-%d %H:%M:%S') $1" | tee -a "$LOG_FILE"; }
 
 #Backup local
 export RESTIC_REPOSITORY="$RESTIC_REPOSITORY_LOCAL"
-restic backup "${BACKUP_DIRS[@]}"
+restic backup "${BACKUP_DIRS[@]}" --quiet
 RETVAL_LOCAL=$?
 
 # Guardar métricas para backup local
