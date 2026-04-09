@@ -11,9 +11,9 @@ Este sistema permite:
 4. Registrar métricas en SQLite para visualización en Grafana.
 5. Restaurar archivos fácilmente.
 
------------------------------------------------------
+---------------------------------------------------
 1️⃣ PREPARAR BACKUPS LOCALES
------------------------------------------------------
+---------------------------------------------------
 
 1. Crear carpeta para los backups:
    mkdir -p /mnt/backups/restic-backups
@@ -40,9 +40,9 @@ Este sistema permite:
 5. Verificar que Restic está instalado:
    restic version
 
------------------------------------------------------
+---------------------------------------------------
 2️⃣ SCRIPT DE BACKUP LOCAL
------------------------------------------------------
+---------------------------------------------------
 
 Archivo: restic-backup.sh
 
@@ -54,9 +54,9 @@ Archivo: restic-backup.sh
   - Dar permisos de ejecución:
     chmod +x /home/restic-backup.sh
 
------------------------------------------------------
+---------------------------------------------------
 3️⃣ PROGRAMAR BACKUPS AUTOMÁTICOS
------------------------------------------------------
+---------------------------------------------------
 
 - Editar crontab:
   crontab -e
@@ -64,9 +64,9 @@ Archivo: restic-backup.sh
 - Agregar backup todos los dias a las 12:
   0 0 * * * /bin/bash /home/restic-backup.sh
 
------------------------------------------------------
+---------------------------------------------------
 4️⃣ RESTAURACIÓN DE BACKUPS
------------------------------------------------------
+---------------------------------------------------
 
 - Ver snapshots disponibles:
   restic snapshots
@@ -80,9 +80,9 @@ Archivo: restic-backup.sh
 - También se puede usar el script interactivo de restauración, que permite elegir snapshot y carpeta destino:
    ./restic-restore.sh
 
------------------------------------------------------
+---------------------------------------------------
 5️⃣ BACKUP EN LA NUBE BACKBLAZE B2
------------------------------------------------------
+---------------------------------------------------
 
 1. Definir conexión a B2 y contraseña en el .env:
    export RESTIC_REPOSITORY=b2:mi-backup-pruebas-seccion9-2026
@@ -94,12 +94,12 @@ Archivo: restic-backup.sh
    restic init
 
 3. Script de backup local + nube (restic-backup-local+nube.sh):
+![Texto alternativo](images/backblaze.png)
 
 
-
------------------------------------------------------
+---------------------------------------------------
 6️⃣ MÉTRICAS Y MONITOREO
------------------------------------------------------
+---------------------------------------------------
 
 - El script restic-metrics.sh guarda:
   - snapshot_id
@@ -109,20 +109,29 @@ Archivo: restic-backup.sh
   - host
   - estado del backup (OK/FAIL)
 - Guardado en SQLite para visualización en Grafana.
+- En Grafana:
+  1. Configura Data Source SQLite apuntando a la base de datos.
+  2. Crea paneles con métricas de backup.
 
------------------------------------------------------
+Para recibir un correo cuando falle un backup:
+  - Nota: Desde Gmail necesitas un **App Password** si tienes verificación en 2 pasos.
+  ![Texto alternativo](images/metricas.png)
+- Verificar alerta:
+  ![Texto alternativo](images/Cgrafana.jpg)
+---------------------------------------------------
 7️⃣ RESUMEN DE PASOS
------------------------------------------------------
+---------------------------------------------------
 
 1. Crear carpetas de backup y logs.
 2. Instalar Restic.
-3. Configurar variables de entorno.
+3. Configurar variables de entorno (.env).
 4. Inicializar repositorios (local y B2).
 5. Crear scripts de backup y métricas.
-6. Programar cron para automatizar backups.
-7. Restaurar snapshots cuando sea necesario.
-8. Monitorear métricas y estado de los backups.
+6. Configurar alertas por email.
+7. Programar cron para automatizar backups.
+8. Restaurar snapshots cuando sea necesario.
+9. Monitorear métricas y estado de los backups en Grafana.
 
------------------------------------------------------
+---------------------------------------------------
 FIN DEL MANUAL
------------------------------------------------------
+---------------------------------------------------
