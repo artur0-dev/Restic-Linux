@@ -116,7 +116,7 @@ Archivo: restic-backup.sh
 Para recibir un correo cuando falle un backup:
   - Nota: Desde Gmail necesitas un **App Password** si tienes verificación en 2 pasos.
   ![Texto alternativo](images/metricas.png)
-- Verificar alerta:
+- Alerta si hay un fallo de backup:
   ![Texto alternativo](images/Cgrafana.jpg)
 ---------------------------------------------------
 7️⃣ RESUMEN DE PASOS
