@@ -1,7 +1,9 @@
 #!/bin/bash
 # Repositorio Restic (local)
-export RESTIC_REPOSITORY=/mnt/backups/restic-backups
-export RESTIC_PASSWORD="TuContraseñaSegura"
+
+source /home/.restic_env
+export RESTIC_REPOSITORY="$RESTIC_REPOSITORY_LOCAL"
+export RESTIC_PASSWORD="$RESTIC_PASSWORD"
 
 # Directorios a respaldar
 BACKUP_DIRS=(

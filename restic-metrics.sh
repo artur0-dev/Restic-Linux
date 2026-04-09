@@ -1,7 +1,7 @@
 #!/bin/bash
 
 export RESTIC_REPOSITORY="/mnt/backups/restic-backups"
-export RESTIC_PASSWORD="TuContraseñaSegura"
+export RESTIC_PASSWORD="$RESTIC_PASSWORD"
 
 # Base de datos SQLite
 DB_FILE="/var/lib/grafana/restic_metrics.db"   

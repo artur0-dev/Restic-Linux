@@ -1,14 +1,14 @@
 #!/bin/bash
 # Backup local + nube Backblaze B2
 
-export RESTIC_PASSWORD="TuContraseñaSegura"
+export RESTIC_PASSWORD="$RESTIC_PASSWORD"
 BACKUP_DIRS=("/etc" "/home/ids_mover_a_db.py")
 LOG_FILE=~/restic-backup.log
 
 log() { echo "$(date '+%Y-%m-%d %H:%M:%S') $1" | tee -a "$LOG_FILE"; }
 
 #Backup local
-export RESTIC_REPOSITORY=/mnt/backups/restic-backups
+export RESTIC_REPOSITORY="$RESTIC_REPOSITORY_LOCAL"
 restic backup "${BACKUP_DIRS[@]}"
 RETVAL_LOCAL=$?
 
@@ -22,9 +22,9 @@ else
 fi
 
 # Backup nube
-export RESTIC_REPOSITORY=b2:mi-backup-pruebas-seccion9-2026
-export B2_ACCOUNT_ID="tu_account_id"
-export B2_ACCOUNT_KEY="tu_application_key"
+export RESTIC_REPOSITORY="$RESTIC_REPOSITORY"
+export B2_ACCOUNT_ID="$B2_ACCOUNT_ID"
+export B2_ACCOUNT_KEY="$B2_ACCOUNT_KEY"
 restic backup "${BACKUP_DIRS[@]}"
 RETVAL_CLOUD=$?
 

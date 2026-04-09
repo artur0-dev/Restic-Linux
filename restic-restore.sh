@@ -1,10 +1,17 @@
 #!/bin/bash
-export RESTIC_REPOSITORY="/mnt/backups/restic-backups"
-export RESTIC_PASSWORD="TuContraseñaSegura"
-# Carpeta donde se restaura
+# restic-restore.sh
+# Restauración interactiva con selección por número o ID
+
+# -------------------------
+# CONFIGURACIÓN
+# -------------------------
+export RESTIC_REPOSITORY="$RESTIC_REPOSITORY_LOCAL"
+export RESTIC_PASSWORD="$RESTIC_PASSWORD"
 DEFAULT_TARGET="/tmp/restic-restore"
 
-
+# -------------------------
+# FUNCIONES
+# -------------------------
 log() {
     echo "$(date '+%Y-%m-%d %H:%M:%S') $1"
 }
@@ -20,7 +27,10 @@ list_snapshots() {
     done
 }
 
-# Requiere jq instalado para parsear JSON
+# -------------------------
+# INTERFAZ
+# -------------------------
+# Requiere jq instalado para parsear JSON: sudo apt install jq
 list_snapshots
 
 read -p "Introduce el número o ID del snapshot que quieres restaurar: " CHOICE
