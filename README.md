@@ -2,7 +2,7 @@
       SISTEMA DE BACKUP CON RESTIC
       LOCAL + NUBE BACKBLAZE B2
 ===================================================
-
+![Texto alternativo](images/Arquitectura de respaldo en VPS.png)
 Este sistema permite:
 
 1. Hacer backups locales en tu disco.
