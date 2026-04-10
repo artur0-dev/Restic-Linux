@@ -7,7 +7,6 @@
 # -------------------------
 source /home/.restic_env
 
-
 BACKUP_DIRS=(
     "/var/log/restic"
     "/home/pruebas.txt"
@@ -39,6 +38,7 @@ if [ $RETVAL_LOCAL -eq 0 ]; then
 else
     log "Error: Backup LOCAL fallido."
     $METRICS_SCRIPT FAIL
+    printf "Subject: Error de backup LOCAL\n\nError en los backups LOCAL" | msmtp "$email"
 fi
 
 restic forget $RETENTION --prune
@@ -68,6 +68,7 @@ if [ $RETVAL_B2 -eq 0 ]; then
     log "Backup NUBE completado con éxito."
 else
     log "Error: Backup NUBE fallido."
+    printf "Subject: Error de backup B2\n\nError en los backups B2" | msmtp "$email"
 fi
 
 restic -r "$RESTIC_REPOSITORY_B2" forget $RETENTION --prune
@@ -75,6 +76,20 @@ if [ $? -eq 0 ]; then
     log "Snapshots antiguos eliminados correctamente (Nube)."
 else
     log "Advertencia: Error al eliminar snapshots antiguos (Nube)."
+fi
+
+# -------------------------
+# BACKUP MEGA (nube)
+# -------------------------
+
+rclone sync "$RESTIC_REPOSITORY_LOCAL" mega-restic:restic-backups
+RETVAL_MEGA=$?
+
+if [ $RETVAL_MEGA -eq 0 ]; then
+    log "Backup MEGA completado con éxito."
+else
+    log "Error: Backup MEGA fallido."
+    printf "Subject: Error de backup MEGA\n\nError en los backups MEGA" | msmtp "$email"
 fi
 
 # -------------------------
