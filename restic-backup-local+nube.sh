@@ -9,6 +9,7 @@ source /home/.restic_env
 
 
 BACKUP_DIRS=(
+    "/var/log/restic"
     "/home/pruebas.txt"
     "/home/ids_mover_a_db.py"
 )
@@ -16,7 +17,7 @@ LOG_FILE="/var/log/restic/restic-backup.log"
 METRICS_SCRIPT="/home/restic-analythics.sh"
 
 # Política de retención
-RETENTION="--prune --keep-daily 14"
+RETENTION="--keep-daily 7"
 
 log() {
     echo "$(date '+%Y-%m-%d %H:%M:%S') $1" | tee -a "$LOG_FILE"
@@ -54,9 +55,13 @@ export RESTIC_REPOSITORY="$RESTIC_REPOSITORY_B2"
 export B2_ACCOUNT_ID="$B2_ACCOUNT_ID"       # tu KeyID
 export B2_ACCOUNT_KEY="$B2_ACCOUNT_KEY"      # tu Application Key
 export RESTIC_PASSWORD="$RESTIC_PASSWORD"
-
+export RESTIC_PASSWORD2="$RESTIC_PASSWORD"
 log "=== Iniciando backup NUBE (B2) ==="
-restic backup "${BACKUP_DIRS[@]}" --quiet
+
+
+# Copiar el último snapshot
+restic -r "$RESTIC_REPOSITORY_LOCAL" copy --repo2 "$RESTIC_REPOSITORY_B2"
+
 RETVAL_B2=$?
 
 if [ $RETVAL_B2 -eq 0 ]; then
@@ -65,7 +70,7 @@ else
     log "Error: Backup NUBE fallido."
 fi
 
-restic forget $RETENTION --prune
+restic -r "$RESTIC_REPOSITORY_B2" forget $RETENTION --prune
 if [ $? -eq 0 ]; then
     log "Snapshots antiguos eliminados correctamente (Nube)."
 else
