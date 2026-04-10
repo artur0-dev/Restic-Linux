@@ -10,7 +10,7 @@ BACKUP_DIRS=(
     "/home/pruebas.txt"
     "/home/ids_mover_a_db.py"
 )
-LOG_FILE="/var/log/restic/restic-backup.log"
+LOG_FILE="$LOG_FILE"
 METRICS_SCRIPT="/home/restic-analythics.sh"
 
 # Política de retención

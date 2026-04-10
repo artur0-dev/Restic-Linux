@@ -1,8 +1,8 @@
 #!/bin/bash
 source /home/.restic_env
-export RESTIC_REPOSITORY="/mnt/backups/restic-backups"
+export RESTIC_REPOSITORY="$RESTIC_REPOSITORY_LOCAL"
 export RESTIC_PASSWORD="$RESTIC_PASSWORD"
-
+STATUS=${1:-FAIL}
 # Base de datos SQLite
 DB_FILE="/var/lib/grafana/restic_metrics.db"   
 
@@ -70,6 +70,6 @@ TOTAL_SIZE=${TOTAL_SIZE:-0}
 HOST=${HOST:-"unknown"}
 
 # Guardar métricas en SQLite
-save_metrics "$SNAP_ID" "$SNAP_TIME" "$NUM_FILES" "$TOTAL_SIZE" "$HOST" "OK"
+save_metrics "$SNAP_ID" "$SNAP_TIME" "$NUM_FILES" "$TOTAL_SIZE" "$HOST" "$STATUS"
 
 log "Métricas guardadas en $DB_FILE"
