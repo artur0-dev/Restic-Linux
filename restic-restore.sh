@@ -16,7 +16,7 @@ log() {
 echo "Selecciona repositorio:"
 echo "1) Local"
 echo "2) Backblaze B2"
-echo "3) Mega (solo copia, NO recomendado para restore)"
+echo "3) Mega"
 
 read -p "Opción: " REPO_CHOICE
 
