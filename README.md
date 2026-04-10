@@ -27,7 +27,7 @@ Este sistema permite:
    Ejemplo de contenido:
    # Repositorios
    RESTIC_REPOSITORY_LOCAL=/mnt/backups/restic-backups
-   RESTIC_REPOSITORY_B2=b2:mi-backup-pruebas-seccion9-2026
+   RESTIC_REPOSITORY_B2=b2:mi-backup-pruebas-seccion-9-2026
 
    # Credenciales
    RESTIC_PASSWORD="TuContraseñaSegura"
@@ -64,6 +64,18 @@ Archivo: restic-backup.sh
 - Agregar backup todos los dias a las 12:
   0 0 * * * /bin/bash /home/restic-backup.sh
 
+- Crear archivo /etc/logrotate.d/restic
+  /var/log/restic/restic-backup.log {
+    daily
+    rotate 7
+    missingok
+    notifempty
+    compress
+    copytruncate
+}
+
+
+
 ---------------------------------------------------
 4️⃣ RESTAURACIÓN DE BACKUPS
 ---------------------------------------------------
@@ -85,7 +97,7 @@ Archivo: restic-backup.sh
 ---------------------------------------------------
 
 1. Definir conexión a B2 y contraseña en el .env:
-   export RESTIC_REPOSITORY=b2:mi-backup-pruebas-seccion9-2026
+   export RESTIC_REPOSITORY=b2:mi-backup-pruebas-seccion-9-2026
    export B2_ACCOUNT_ID="tu_account_id"
    export B2_ACCOUNT_KEY="tu_application_key"
    export RESTIC_PASSWORD="TuContraseñaSegura"
