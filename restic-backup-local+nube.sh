@@ -1,6 +1,4 @@
 #!/bin/bash
-# restic-backup.sh
-# Backup automático de archivos de configuración (local + B2)
 
 # -------------------------
 # CONFIGURACIÓN
