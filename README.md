@@ -1,4 +1,4 @@
-=======================================
+
       SISTEMA DE BACKUP CON RESTIC
       LOCAL + NUBE BACKBLAZE B2
 =======================================
