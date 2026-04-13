@@ -14,7 +14,7 @@ LOG_FILE="$LOG_FILE"
 METRICS_SCRIPT="/home/restic-analythics.sh"
 
 # Política de retención
-RETENTION="--keep-daily 7 --prune"
+RETENTION="--keep-daily 2 --prune"
 
 log() {
     echo "$(date '+%Y-%m-%d %H:%M:%S') $1" | tee -a "$LOG_FILE"
@@ -58,8 +58,9 @@ export RESTIC_PASSWORD2="$RESTIC_PASSWORD"
 log "=== Iniciando backup NUBE (B2) ==="
 
 
-# Copiar el último snapshot
-restic -r "$RESTIC_REPOSITORY_LOCAL" copy --repo2 "$RESTIC_REPOSITORY_B2"
+# Backup
+restic -r "$RESTIC_REPOSITORY_B2" backup "${BACKUP_DIRS[@]}" --quiet
+#restic -r "$RESTIC_REPOSITORY_LOCAL" copy --repo2 "$RESTIC_REPOSITORY_B2"
 
 RETVAL_B2=$?
 

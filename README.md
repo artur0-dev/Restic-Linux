@@ -5,11 +5,14 @@
 ![Texto alternativo](images/Arquitectura_de_respaldo_en_VPS.png)
 Este sistema permite:
 
-1. Hacer backups locales en tu disco.
-2. Hacer backups en la nube (Backblaze B2).
-3. Mantener un historial de 14 días.
-4. Registrar métricas en SQLite para visualización en Grafana.
-5. Restaurar archivos fácilmente.
+- Hacer backups locales en tu disco.
+- Hacer backups en la nube (Backblaze B2).
+- Mantener un historial de 14 días.
+- Mantener backups INMUTABLES en B2 (Object Lock).
+- Mantener una copia secundaria en MEGA.
+- Registrar métricas en SQLite para Grafana.
+- Restaurar archivos fácilmente.
+
 
 ---------------------------------------------------
 1️⃣ PREPARAR BACKUPS LOCALES
@@ -74,11 +77,10 @@ Archivo: restic-backup.sh
     copytruncate
 }
 
-
-
 ---------------------------------------------------
 4️⃣ RESTAURACIÓN DE BACKUPS
 ---------------------------------------------------
+Archivo: restic-restore.sh
 
 - Ver snapshots disponibles:
   restic snapshots
@@ -89,9 +91,13 @@ Archivo: restic-backup.sh
 - Restaurar en la ruta original (sobrescribe archivos):
   restic restore <ID_DEL_SNAPSHOT> --target /
 
-- También se puede usar el script interactivo de restauración, que permite elegir snapshot y carpeta destino:
-   ./restic-restore.sh
+- También se puede usar el script interactivo de restauración, que permite elegir snapshot y carpeta destino
 
+Archivo: restic-restore-test.sh
+ - Busca el último snapshot disponible en el repositorio de restic
+ - Restaura ese snapshot en una carpeta temporal (/tmp/restic-restore-test)
+ - Verifica que la restauración se ha realizado correctamente
+ - Registra el resultado en un log
 ---------------------------------------------------
 5️⃣ BACKUP EN LA NUBE BACKBLAZE B2
 ---------------------------------------------------
@@ -108,9 +114,20 @@ Archivo: restic-backup.sh
 3. Script de backup local + nube (restic-backup-local+nube.sh):
 ![Texto alternativo](images/backblaze.png)
 
+---------------------------------------------------
+6️⃣ COPIA ADICIONAL EN MEGA (BACKUP SECUNDARIO)
+---------------------------------------------------
+
+Se mantiene una copia adicional en MEGA como respaldo extra.
+
+Características:
+
+- 20 GB gratuitos aprox.
+- Copia secundaria de seguridad
+- Complementa B2
 
 ---------------------------------------------------
-6️⃣ MÉTRICAS Y MONITOREO
+7️⃣ MÉTRICAS Y MONITOREO
 ---------------------------------------------------
 
 - El script restic-metrics.sh guarda:
@@ -120,6 +137,7 @@ Archivo: restic-backup.sh
   - tamaño total
   - host
   - estado del backup (OK/FAIL)
+  
 - Guardado en SQLite para visualización en Grafana.
 - En Grafana:
   1. Configura Data Source SQLite apuntando a la base de datos.
@@ -133,18 +151,16 @@ Para recibir un correo cuando falle un backup:
 
 ![Texto alternativo](images/Cgrafana.jpg)
 ---------------------------------------------------
-7️⃣ RESUMEN DE PASOS
+RESUMEN DE PASOS
 ---------------------------------------------------
 
-1. Crear carpetas de backup y logs.
-2. Instalar Restic.
-3. Configurar variables de entorno (.env).
-4. Inicializar repositorios (local y B2).
-5. Crear scripts de backup y métricas.
-6. Configurar alertas por email en Grafana.
-7. Programar cron para automatizar backups.
-8. Restaurar snapshots cuando sea necesario.
-9. Monitorear métricas y estado de los backups en Grafana.
+- Backup local en VPS
+- Backup en Backblaze B2 (INMUTABLE 14 días)
+- Backup en MEGA (copia secundaria)
+- Retención automática de 14 días
+- Protección contra ransomware
+- Monitoreo con Grafana
+- Restauración rápida de snapshots
 
 ---------------------------------------------------
 FIN DEL MANUAL
