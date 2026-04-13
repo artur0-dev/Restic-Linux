@@ -14,7 +14,7 @@ LOG_FILE="$LOG_FILE"
 METRICS_SCRIPT="/home/restic-analythics.sh"
 
 # Política de retención
-RETENTION="--keep-daily 7"
+RETENTION="--keep-daily 7 --prune"
 
 log() {
     echo "$(date '+%Y-%m-%d %H:%M:%S') $1" | tee -a "$LOG_FILE"
@@ -39,7 +39,7 @@ else
     printf "Subject: Error de backup LOCAL\n\nError en los backups LOCAL" | msmtp "$email"
 fi
 
-restic forget $RETENTION --prune
+restic forget $RETENTION
 if [ $? -eq 0 ]; then
     log "Snapshots antiguos eliminados correctamente (LOCAL)."
 else
@@ -48,6 +48,7 @@ fi
 
 # -------------------------
 # BACKUP NUBE (Backblaze B2)
+#copia inmutable
 # -------------------------
 export RESTIC_REPOSITORY="$RESTIC_REPOSITORY_B2"
 export B2_ACCOUNT_ID="$B2_ACCOUNT_ID"       # tu KeyID
@@ -69,7 +70,7 @@ else
     printf "Subject: Error de backup B2\n\nError en los backups B2" | msmtp "$email"
 fi
 
-restic -r "$RESTIC_REPOSITORY_B2" forget $RETENTION --prune
+restic -r "$RESTIC_REPOSITORY_B2" forget $RETENTION
 if [ $? -eq 0 ]; then
     log "Snapshots antiguos eliminados correctamente (Nube)."
 else
@@ -78,9 +79,10 @@ fi
 
 # -------------------------
 # BACKUP MEGA (nube)
+#sin copia inmutable
 # -------------------------
 
-rclone sync "$RESTIC_REPOSITORY_LOCAL" mega-restic:restic-backups
+rclone copy "$RESTIC_REPOSITORY_LOCAL" mega-restic:restic-backups
 RETVAL_MEGA=$?
 
 if [ $RETVAL_MEGA -eq 0 ]; then
@@ -89,6 +91,8 @@ else
     log "Error: Backup MEGA fallido."
     printf "Subject: Error de backup MEGA\n\nError en los backups MEGA" | msmtp "$email"
 fi
+
+restic -r rclone:mega-restic:restic-backups forget $RETENTION
 
 # -------------------------
 # VERIFICACIÓN E INTEGRIDAD (solo local)
