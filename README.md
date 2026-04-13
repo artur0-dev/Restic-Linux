@@ -1,9 +1,5 @@
-```text
-=======================================
-      SISTEMA DE BACKUP CON RESTIC
-      LOCAL + NUBE BACKBLAZE B2
-=======================================
-```
+# SISTEMA DE BACKUP CON RESTIC
+## BACKUP LOCAL + NUBE (BACKBLAZE B2)
 ![Texto alternativo](images/Arquitectura_de_respaldo_en_VPS.png)
 Este sistema permite:
 
