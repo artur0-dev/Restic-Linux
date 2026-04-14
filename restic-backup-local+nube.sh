@@ -14,7 +14,7 @@ LOG_FILE="$LOG_FILE"
 METRICS_SCRIPT="/home/restic-analythics.sh"
 
 # Política de retención
-RETENTION="--keep-daily 2 --prune"
+RETENTION="--keep-daily 2"
 
 log() {
     echo "$(date '+%Y-%m-%d %H:%M:%S') $1" | tee -a "$LOG_FILE"
@@ -46,6 +46,14 @@ else
     log "Advertencia: Error al eliminar snapshots antiguos (LOCAL)."
 fi
 
+restic -r "$RESTIC_REPOSITORY" prune
+
+if [ $? -eq 0 ]; then
+    log "Datos antiguos eliminados correctamente (Nube)."
+else
+    log "Advertencia: No se pudieron eliminar algunos datos (posible Object Lock)."
+fi
+
 # -------------------------
 # BACKUP NUBE (Backblaze B2)
 #copia inmutable
@@ -72,11 +80,13 @@ else
 fi
 
 restic -r "$RESTIC_REPOSITORY_B2" forget $RETENTION
+
 if [ $? -eq 0 ]; then
-    log "Snapshots antiguos eliminados correctamente (Nube)."
+    log "Snapshots antiguos marcados para eliminación (Nube)."
 else
-    log "Advertencia: Error al eliminar snapshots antiguos (Nube)."
+    log "Advertencia: Error al aplicar política de retención (Nube)."
 fi
+
 
 # -------------------------
 # BACKUP MEGA (nube)
